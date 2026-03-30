@@ -151,12 +151,12 @@ tr:hover td{background:rgba(255,255,255,.015)}
 .tag.Efectivo{background:rgba(201,168,76,.12);color:var(--gold)}
 .tag.Otro{background:rgba(255,255,255,.08);color:var(--muted2)}
 .empty{text-align:center;padding:44px;color:var(--muted);font-size:.9rem}
-.delete-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:.9rem;padding:4px 8px;border-radius:6px;transition:color .2s,background .2s;opacity:.4}
+.delete-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:.9rem;padding:4px 8px;border-radius:6px;transition:color .2s,background .2s;opacity:.6}
 .delete-btn:hover{color:var(--coral);background:rgba(224,107,80,.1);opacity:1}
 
 /* ── CONFIRM MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:100;display:none;align-items:center;justify-content:center}
-.modal-overlay.show{display:flex}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:9999;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex !important}
 .modal{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;max-width:380px;width:90%;animation:popIn .25s ease}
 .modal h4{font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:10px}
 .modal p{color:var(--muted2);font-size:.88rem;line-height:1.5;margin-bottom:22px}
@@ -534,7 +534,7 @@ function renderTable(query='') {
       <td><span class="tag ${tag}">${d.method}</span></td>
       <td style="color:var(--muted2);font-size:.85rem">${d.description||'—'}</td>
       <td style="color:var(--muted);font-size:.83rem">${(d.created_at||'').split('T')[0]}</td>
-      <td><button class="delete-btn" onclick="openModal('${d.id}')" title="Eliminar">✕</button></td>
+      <td><button class="delete-btn" onclick="openModal(${JSON.stringify(d.id)})" title="Eliminar">✕</button></td>
     </tr>`;
   }).join('');
 }
@@ -566,3 +566,6 @@ fetchDonations();
 </script>
 </body>
 </html>
+
+
+
