@@ -430,19 +430,21 @@ async function submitDonation() {
   }
 }
 
-function openModal(id) { deleteId = id; document.getElementById('deleteModal').classList.add('show'); }
+function openModal(id) { deleteId = String(id); console.log('Modal opened, id:', deleteId); document.getElementById('deleteModal').classList.add('show'); }
 function closeModal() { deleteId = null; document.getElementById('deleteModal').classList.remove('show'); }
 
 async function confirmDelete() {
-  if (!deleteId) return;
+  console.log('Confirming delete for id:', deleteId);
+  if (!deleteId) { console.log('No deleteId!'); return; }
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${deleteId}`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${deleteId}`, {
       method:'DELETE',
-      headers:{ 'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}` }
+      headers:{ 'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'return=representation' }
     });
+    console.log('Deleted, status:', res.status);
     closeModal();
     fetchDonations();
-  } catch(e) { closeModal(); }
+  } catch(e) { console.log('Error:', e); closeModal(); }
 }
 
 function filterTable(q) {
@@ -534,7 +536,7 @@ function renderTable(query='') {
       <td><span class="tag ${tag}">${d.method}</span></td>
       <td style="color:var(--muted2);font-size:.85rem">${d.description||'—'}</td>
       <td style="color:var(--muted);font-size:.83rem">${(d.created_at||'').split('T')[0]}</td>
-      <td><button class="delete-btn" onclick="openModal(${JSON.stringify(d.id)})" title="Eliminar">✕</button></td>
+      <td><button class="delete-btn" data-id="${d.id}" onclick="openModal(this.dataset.id)" title="Eliminar">✕</button></td>
     </tr>`;
   }).join('');
 }
@@ -566,6 +568,5 @@ fetchDonations();
 </script>
 </body>
 </html>
-
 
 
